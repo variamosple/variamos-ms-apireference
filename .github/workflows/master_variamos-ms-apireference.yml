@@ -31,7 +31,7 @@ jobs:
       with:
         push: true
         tags: index.docker.io/${{ secrets.AzureAppService_ContainerUsername_f3bebb3f1160433fb0f4acf3d2d534d7 }}/variamos-ms-apireference:${{ github.sha }}
-        file: ./Dockerfile
+        file: ./src/Infraestructure/Dockerfile
 
   deploy:
     runs-on: ubuntu-latest
