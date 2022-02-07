@@ -1,5 +1,5 @@
 {
-  "version": "1.YEAR.MONTH.DAY.HOUR",
+  "version": "NUMBER.YEAR.MONTH.DAY.HOUR",
   "name": "variamos-ms-apireference",
   "port": 4004
 }
