@@ -4,7 +4,7 @@ const router = Router();
 
 let referenceUseCases = new ReferenceUseCases();
 
-router.get(
+router.post(
   "/external-functions/test-function",
   referenceUseCases.testExternalFunction
 );

@@ -7,5 +7,5 @@ const express_1 = require("express");
 const referenceUseCases_1 = __importDefault(require("../Domain/reference/referenceUseCases"));
 const router = express_1.Router();
 let referenceUseCases = new referenceUseCases_1.default();
-router.get("/external-functions/test-function", referenceUseCases.testExternalFunction);
+router.post("/external-functions/test-function", referenceUseCases.testExternalFunction);
 exports.default = router;

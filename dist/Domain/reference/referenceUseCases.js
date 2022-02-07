@@ -13,20 +13,23 @@ const response_1 = require("../Init/Entities/response");
 class ReferenceUseCases {
     constructor() {
         this.testExternalFunction = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const transaction_Id = "ChangeThisForMicroserviceName_" + generateId();
             try {
                 const responseApi = new response_1.ResponseAPISuccess();
                 responseApi.message = "Message successfully";
-                responseApi.transactionId = "testExternalFunction_";
+                responseApi.transactionId = transaction_Id;
+                // General structure of the project.
+                let project = req.body.data.project;
+                // Selected model.
+                let modelSelectedId = req.body.data.modelSelectedId;
                 let object = {
                     meesage: "hello world in base64!",
                     firstObject: "TestObject",
-                    secondProperty: "TestProperty",
+                    secondProperty: "TestProperty"
                 };
-                // Convert content intoBase64
+                // Convert content into Base64
                 let content_encode = Buffer.from(JSON.stringify(object)).toString("base64");
-                // Test decode.
-                // let content_decode = Buffer.from(content_encode, "base64").toString();
-                // console.log(content_decode);
+                //Create var for data response. 
                 let dataResponse = {
                     name: "test.json",
                     content: content_encode,
@@ -36,13 +39,22 @@ class ReferenceUseCases {
             }
             catch (e) {
                 const responseApi = new response_1.ResponseAPIError();
+                responseApi.transactionId = transaction_Id;
                 responseApi.message = "Internal Server Error";
                 responseApi.errorCode = "00";
                 responseApi.data = JSON.parse(JSON.stringify("{ messageError: " + e + " }"));
-                responseApi.transactionId = "testExternalFunction_";
                 return res.status(500).json(responseApi);
             }
         });
     }
 }
 exports.default = ReferenceUseCases;
+function generateId() {
+    var dt = new Date().getTime();
+    var uuid = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
+        var r = (dt + Math.random() * 16) % 16 | 0;
+        dt = Math.floor(dt / 16);
+        return (c === "x" ? r : (r & 0x3) | 0x8).toString(16);
+    });
+    return uuid;
+}
