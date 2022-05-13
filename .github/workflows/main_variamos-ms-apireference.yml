@@ -6,7 +6,7 @@ name: Build and deploy container app to Azure Web App - variamos-ms-apireference
 on:
   push:
     branches:
-      - master
+      - main
   workflow_dispatch:
 
 jobs:
@@ -19,18 +19,18 @@ jobs:
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v1
 
-    - name: Log in to registry
+    - name: Login to ACR
       uses: docker/login-action@v1
       with:
-        registry: https://variamos.azurecr.io/
-        username: ${{ secrets.AzureAppService_ContainerUsername_fd321713b8474d9ebff70f970046a26d }}
-        password: ${{ secrets.AzureAppService_ContainerPassword_352914c51b3a4a13923457983903f884 }}
+        registry:variamos.azurecr.io
+        username: ${{secrets.ACRUSERNAME}}
+        password: ${{secrets.ACRUSERPASSWORD}}
 
     - name: Build and push container image to registry
       uses: docker/build-push-action@v2
       with:
         push: true
-        tags: variamos.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_fd321713b8474d9ebff70f970046a26d }}/variamos-ms-apireference:${{ github.sha }}
+        tags:  variamos.azurecr.io/${{secrets.ACRUSERNAME}}//variamos-ms-apireference:latest
         file: ./Dockerfile
 
   deploy:
@@ -41,11 +41,11 @@ jobs:
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
     steps:
-    - name: Deploy to Azure Web App
+    - name: Deploy to Azure Web App variamos-ms-apireference in production slot
       id: deploy-to-webapp
       uses: azure/webapps-deploy@v2
       with:
         app-name: 'variamos-ms-apireference'
         slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_9be26ac7c3f04113bf54ac75ba98c700 }}
-        images: 'variamos.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_fd321713b8474d9ebff70f970046a26d }}/variamos-ms-apireference:${{ github.sha }}'
+        publish-profile: ${{secrets.PRODUCTIONSLOTPUBLISHPROFILE}}
+        images: 'variamos.azurecr.io/${{secrets.ACRUSERNAME}}/variamos-ms-apireference:latest'
